@@ -1,0 +1,26 @@
+node_modules
+coverage
+npm-debug.log
+.project
+.classpath
+.serverless
+.DS_Store
+.local/mongo
+yarn-error.log
+.yarn/unplugged
+.yarn/build-state.yml
+.idea/workspace.xml
+docs
+lerna-debug.log
+globalConfig.json
+# ignore typescript built files
+dist/
+
+# ignore cypress run files
+cypress/videos/*
+cypress/screenshots/*
+
+changelog.txt
+
+local-values.yaml
+*.tgz

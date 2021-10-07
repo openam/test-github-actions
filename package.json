@@ -1,0 +1,40 @@
+{
+  "name": "test-github-actions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openam/test-github-actions.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">= 14.x.x"
+  },
+  "bugs": {
+    "url": "https://github.com/openam/test-github-actions/issues"
+  },
+  "homepage": "https://github.com/openam/test-github-actions#readme",
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint && npm test",
+      "pre-commit": "npm test",
+      "commit-msg": "commitlint --edit"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@commitlint/format": "^12.1.4",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "husky": "^4.3.8",
+    "jest": "^27.2.4"
+  }
+}
