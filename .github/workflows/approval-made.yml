@@ -1,15 +1,15 @@
 name: Approval Made
 
 on:
-  pull_request:
-    types: [ labeled, unlabeled ]
   pull_request_review:
     types:
       - submitted
 
 jobs:
   approved:
-    if: contains(github.event.pull_request.labels.*.name, 'beta-environment')
+    if: |
+      contains(github.event.pull_request.labels.*.name, 'beta-environment') &&
+      github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     steps:
       - run: echo "This PR was approved and has beta-environment label"
