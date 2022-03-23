@@ -1,15 +1,31 @@
-name: Approval Made
+name: Beta Environment
 
 on:
   pull_request_review:
     types:
       - submitted
 
-jobs:
-  approved:
+jobs:  
+  beta-environment-draft-required:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Needs to be a Draft PR to build to beta-environment"
+  beta-environment-label-required:
+    if: "!contains(github.event.pull_request.labels.*.name, 'beta-environment')"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Need to have `beta-environment` label to build to out"
+  beta-environment-approval-required:
+    if: github.event.review.state != 'approved'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Need to have an 'approved' pr to build out"
+  beta-environment-build:
     if: |
       contains(github.event.pull_request.labels.*.name, 'beta-environment') &&
-      github.event.review.state == 'approved'
+      github.event.review.state == 'approved' &&
+      github.event.pull_request.draft == true
     runs-on: ubuntu-latest
     steps:
       - run: echo "This PR was approved and has beta-environment label"
