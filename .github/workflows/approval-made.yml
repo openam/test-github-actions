@@ -9,7 +9,7 @@ on:
 
 jobs:
   approved:
-    if: contains(github.event.pull_request.labels.*.name, 'beta-environment')
     runs-on: ubuntu-latest
     steps:
-      - run: echo "This PR was approved and contains the beta-environment label"
+      - run: echo "This PR was approved"
+      - run: echo ${{ toJson(github) }}
