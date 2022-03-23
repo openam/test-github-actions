@@ -2,8 +2,7 @@ name: Approval Made
 
 on:
   pull_request:
-    types:
-      - labeled
+    types: [ labeled, unlabeled ]
   pull_request_review:
     types:
       - submitted
