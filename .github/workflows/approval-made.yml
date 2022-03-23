@@ -8,7 +8,7 @@ on:
 jobs:  
   beta-environment-skipped:
     if: |
-      "!contains(github.event.pull_request.labels.*.name, 'beta-environment')" ||
+      ${{ !contains(github.event.pull_request.labels.*.name, 'beta-environment') }} ||
       github.event.review.state != 'approved' ||
       github.event.pull_request.draft == false
     runs-on: ubuntu-latest
