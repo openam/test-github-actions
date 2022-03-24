@@ -1,6 +1,9 @@
 name: Beta Environment
 
 on:
+  pull_request:
+    types:
+      - closed
   pull_request_review:
     types:
       - submitted
