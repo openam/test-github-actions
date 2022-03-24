@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - if: github.event.pull_request.state.closed == true
-      run: echo "Need to destroy the beta-environment"
+        run: echo "Need to destroy the beta-environment"
       # this job will only run if the PR has been merged
       - if: github.event.pull_request.merged == true
         run: |
