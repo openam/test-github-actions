@@ -36,6 +36,7 @@ jobs:
       - if: github.event.pull_request.merged == false
         run: |
           echo PR #${{ github.event.number }} has been closed without being merged
+      - run: echo "${{ toJson(github) }}"
 
   beta-environment-build:
     if: |
