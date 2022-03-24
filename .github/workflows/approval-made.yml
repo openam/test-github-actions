@@ -19,6 +19,11 @@ jobs:
         run: echo "Need to have 'beta-environment' label to build to beta-environment"
       - if: github.event.review.state != 'approved'
         run: echo "Need to have an 'approved' pr to build out"
+  beta-environment-destroy:
+    if: github.event.pull_request.state.closed == true
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Need to destroy the beta-environment"
   beta-environment-build:
     if: |
       contains(github.event.pull_request.labels.*.name, 'beta-environment') &&
