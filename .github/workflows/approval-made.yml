@@ -23,10 +23,11 @@ jobs:
       - if: github.event.review.state != 'approved'
         run: echo "Need to have an 'approved' pr to build out"
       - run: echo "${{ toJson(github) }}"
+
   beta-environment-destroy:
     runs-on: ubuntu-latest
     steps:
-      - if: github.event.pull_request.state.closed == true
+      - if: github.event.pull_request.state == 'closed'
         run: echo "Need to destroy the beta-environment"
       # this job will only run if the PR has been merged
       - if: github.event.pull_request.merged == true
