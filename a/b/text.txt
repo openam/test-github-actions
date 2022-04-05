@@ -1,0 +1,3 @@
+Here is the contents of text.txt
+2nd line
+3rd line

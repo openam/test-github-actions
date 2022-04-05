@@ -54,11 +54,14 @@ jobs:
           echo PR number${PR} has been started
           echo PR number${PR} 3rd line
           echo PR number${PR} 2nd line
+      - name: ls -al before cd
+        run: |
+          ls -al
       - name: test multi-line cd
         run: |
-          cd .github/workflows
+          cd a/b
           ls -al
-          cat approval-made.yml
+          cat text.txt
       - name: ls -al following cd step
         run: |
           ls -al
