@@ -40,17 +40,28 @@ jobs:
         run: echo PR number${PR} has been started
       - name: test multi-line command (one multi line)
         run: |
+          PR=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           echo PR number${PR} has been started
       - name: test multi-line command (multi line)
         run: |
-          echo PR number${PR} has been started \
+          PR=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }') \
+            && echo PR number${PR} has been started \
             && echo PR number${PR} 2nd line \
             && echo PR number${PR} 3rd line
       - name: test multi-line command (multi line without &&)
         run: |
+          PR=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           echo PR number${PR} has been started
           echo PR number${PR} 3rd line
           echo PR number${PR} 2nd line
+      - name: test multi-line cd
+        run: |
+          cd .github/workflows
+          ls -al
+          cat approval-made.yml
+      - name: ls -al following cd step
+        run: |
+          ls -al
 
   beta-environment-destroy:
     runs-on: ubuntu-latest
