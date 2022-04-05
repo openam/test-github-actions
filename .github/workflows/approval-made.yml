@@ -24,13 +24,20 @@ jobs:
         run: echo "Need to have an 'approved' pr to build out"
       - run: echo "${{ toJson(github) }}"
       - name: test multi-line command (single line)
+        run: echo PR number${{ github.event.number }} has been started
+      - name: test multi-line command (one multi line)
         run: |
-          echo PR #${{ github.event.number }} has been started
+          echo PR number${{ github.event.number }} has been started
       - name: test multi-line command (multi line)
         run: |
-          echo PR #${{ github.event.number }} has been started \
-          && echo PR #${{ github.event.number }} 2nd line \
-          && echo PR #${{ github.event.number }} 3rd line
+          echo PR number${{ github.event.number }} has been started \
+            && echo PR number${{ github.event.number }} 2nd line \
+            && echo PR number${{ github.event.number }} 3rd line
+      - name: test multi-line command (multi line without &&)
+        run: |
+          echo PR number${{ github.event.number }} has been started
+          echo PR number${{ github.event.number }} 3rd line
+          echo PR number${{ github.event.number }} 2nd line
 
   beta-environment-destroy:
     runs-on: ubuntu-latest
