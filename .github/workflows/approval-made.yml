@@ -23,6 +23,8 @@ jobs:
       - if: github.event.review.state != 'approved'
         run: echo "Need to have an 'approved' pr to build out"
       - run: echo "${{ toJson(github) }}"
+      - name: show env variables
+        run: env
       - name: test multi-line command (single line)
         run: echo PR number${{ github.event.number }} has been started
       - name: test multi-line command (one multi line)
