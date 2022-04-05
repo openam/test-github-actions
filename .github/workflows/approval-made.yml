@@ -23,6 +23,14 @@ jobs:
       - if: github.event.review.state != 'approved'
         run: echo "Need to have an 'approved' pr to build out"
       - run: echo "${{ toJson(github) }}"
+      - name: test multi-line command (single line)
+        run: |
+          echo PR #${{ github.event.number }} has been started
+      - name: test multi-line command (multi line)
+        run: |
+          echo PR #${{ github.event.number }} has been started \
+          && echo PR #${{ github.event.number }} 2nd line \
+          && echo PR #${{ github.event.number }} 3rd line
 
   beta-environment-destroy:
     runs-on: ubuntu-latest
