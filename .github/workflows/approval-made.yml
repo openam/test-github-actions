@@ -97,7 +97,7 @@ jobs:
         run: |
           echo PR #${{ github.event.number }} has been closed without being merged
       - run: echo "${{ toJson(github) }}"
-      - if: !contains(github.event.pull_request.labels.*.name, 'beta-environment')
+      - if: false || !contains(github.event.pull_request.labels.*.name, 'beta-environment')
         run: |
           echo the beta-environment label does not exist
 
