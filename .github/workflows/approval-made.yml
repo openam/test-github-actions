@@ -7,6 +7,8 @@ on:
   pull_request_review:
     types:
       - submitted
+  label:
+    types: [deleted, edited]
 
 jobs:  
   beta-environment-skipped:
@@ -95,6 +97,9 @@ jobs:
         run: |
           echo PR #${{ github.event.number }} has been closed without being merged
       - run: echo "${{ toJson(github) }}"
+      - if: !contains(github.event.pull_request.labels.*.name, 'beta-environment')
+        run: |
+          echo the beta-environment label does not exist
 
   beta-environment-build:
     if: |
