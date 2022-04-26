@@ -4,11 +4,10 @@ on:
   pull_request:
     types:
       - closed
+      - labeled
   pull_request_review:
     types:
       - submitted
-  label:
-    types: [deleted, edited]
 
 jobs:  
   beta-environment-skipped:
