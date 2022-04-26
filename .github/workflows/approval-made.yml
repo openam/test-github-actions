@@ -4,7 +4,7 @@ on:
   pull_request:
     types:
       - closed
-      - labeled
+      - unlabeled
   pull_request_review:
     types:
       - submitted
