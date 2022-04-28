@@ -9,7 +9,7 @@ on:
     types:
       - submitted
 
-jobs:  
+jobs:
   beta-environment-skipped:
     if: |
       ${{ !contains(github.event.pull_request.labels.*.name, 'beta-environment') }} ||
@@ -76,7 +76,11 @@ jobs:
         run: env
       - name: get PR from GITHUB_REF
         run: |
-          PR=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          PR_FROM_EVENT=${{ github.event.number }}
+          PR_FROM_REF=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          echo PR_FROM_EVENT is $PR_FROM_EVENT
+          echo PR_FROM_REF is $PR_FROM_REF
+          PR=${PR=-$PR_FROM_EVENT}
           echo pr is $PR
           echo betaEnvironment beta$PR without braces
           echo betaEnvironment beta${PR} with braces
