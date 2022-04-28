@@ -80,7 +80,7 @@ jobs:
           PR_FROM_REF=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           echo PR_FROM_EVENT is $PR_FROM_EVENT
           echo PR_FROM_REF is $PR_FROM_REF
-          PR=${PR:-$PR_FROM_EVENT}
+          PR=${PR_FROM_REF:-$PR_FROM_EVENT}
           echo pr is $PR
           echo betaEnvironment beta$PR without braces
           echo betaEnvironment beta${PR} with braces
