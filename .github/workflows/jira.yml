@@ -1,4 +1,7 @@
-on: push
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '35 * * * *'
 
 name: Security Alerts
 
@@ -11,8 +14,6 @@ jobs:
         include:
           - project: AA
             repository: services
-          - project: AA
-            repository: backoffice
     steps:
     - name: Login
       uses: atlassian/gajira-login@master
@@ -30,9 +31,8 @@ jobs:
         summary: |
           Test: evaluate dependabot alerts for ${{ matrix.repository }}
         description: |
-          Run `yarn why <packageName>` to see where the package came from.
-          Add the `--prod` flag to verify if it's something in the prod dependencies
-          https://github.com/atomicfi/${{ matrix.repository }}/security/dependabot
+          Identify and Evaluate vulnerabilities in the repo see https://www.notion.so/atomicfi/Process-For-Handling-Vulnerabilities-d00edd1ddab24829baee5c66a8f56a55
+          and https://github.com/atomicfi/${{ matrix.repository }}/security/dependabot
         fields: '{"priority":{"name":"High","id":"2","iconUrl":"https://atomicfi.atlassian.net/images/icons/priorities/high.svg"},"labels":["Security"]}'
 
     - name: Log created issue
