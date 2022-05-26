@@ -103,6 +103,9 @@ jobs:
       - if: false || !contains(github.event.pull_request.labels.*.name, 'beta-environment')
         run: |
           echo the beta-environment label does not exist
+      - if: false || (github.event.action == 'unlabeled' && !contains(github.event.pull_request.labels.*.name, 'beta-environment'))
+        run: |
+          echo the beta-environment label does not exist and it was a label that was removed
 
   beta-environment-build:
     if: |
