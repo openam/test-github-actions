@@ -13,19 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - run: echo "Should run on push to master or production"
-      - run: echo "${{ toJson(github) }}"
+      - run: echo "${{ toJson(github) }}" || true
       - run: cat ./.github/workflows/migrations.yml
 
   migrations-master:
     if: |
-      github.ref == 'master'
+      github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - run: echo "Should run commands for master branch merge"
 
   migrations-production:
     if: |
-      github.ref == 'production'
+      github.ref == 'refs/heads/production'
     runs-on: ubuntu-latest
     steps:
       - run: echo "Should run commands for production branch merge"
