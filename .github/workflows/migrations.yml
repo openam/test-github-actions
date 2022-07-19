@@ -22,6 +22,8 @@ jobs:
       - run: echo "Should run commands for master branch merge"
 
   migrations-production:
+    if: |
+      github.ref == 'production'
     runs-on: ubuntu-latest
     steps:
       - run: echo "Should run commands for production branch merge"
