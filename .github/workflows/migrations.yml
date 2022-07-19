@@ -10,9 +10,11 @@ jobs:
   migrations:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - run: echo "Should run on push to master or production"
-      - run: cat ./.github/workflows/migrations.yml
       - run: echo "toJson(github) - ${{ toJson(github) }}"
+      - run: cat ./.github/workflows/migrations.yml
 
   migrations-master:
     if: |
