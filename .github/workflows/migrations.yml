@@ -2,7 +2,7 @@ name: Migrations
 
 on:
   push:
-    branch:
+    branches:
       - master
       - production
 
