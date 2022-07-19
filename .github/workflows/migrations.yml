@@ -19,6 +19,7 @@ jobs:
   migrations-master:
     if: |
       github.ref == 'refs/heads/master'
+    name: migrations
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,6 +32,7 @@ jobs:
   migrations-production:
     if: |
       github.ref == 'refs/heads/production'
+    name: migrations
     runs-on: ubuntu-latest
     strategy:
       matrix:
