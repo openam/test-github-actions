@@ -20,12 +20,22 @@ jobs:
     if: |
       github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - environment: 'DEVELOPMENT'
     steps:
       - run: echo "Should run commands for master branch merge"
+      - run: echo NODE_ENV=${{matrix.environment}} yarn migrate-mongo up
 
   migrations-production:
     if: |
       github.ref == 'refs/heads/production'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - environment: 'DEVELOPMENT'
     steps:
       - run: echo "Should run commands for production branch merge"
+      - run: echo NODE_ENV=${{matrix.environment}} yarn migrate-mongo up
