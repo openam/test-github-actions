@@ -35,7 +35,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - environment: 'DEVELOPMENT'
+          - environment: 'PRODUCTION'
+          - environment: 'SANDBOX'
     steps:
       - run: echo "Should run commands for production branch merge"
       - run: echo NODE_ENV=${{matrix.environment}} yarn migrate-mongo up
