@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Should run on push to master or production"
-      - run: cat ./github/workflows/migrations.yml
+      - run: cat ./.github/workflows/migrations.yml
       - run: echo "toJson(github) - ${{ toJson(github) }}"
 
   migrations-master:
