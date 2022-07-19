@@ -13,8 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - run: echo "Should run on push to master or production"
-      - run: echo "${{ toJson(github) }}" || true
       - run: cat ./.github/workflows/migrations.yml
+      - run: echo "${{ toJson(github) }}" || true
 
   migrations-master:
     if: |
