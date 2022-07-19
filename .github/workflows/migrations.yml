@@ -1,0 +1,27 @@
+name: Migrations
+
+on:
+  push:
+    branch:
+      - master
+      - production
+
+jobs:
+  migrations:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Should run on push to master or production"
+      - run: cat ./github/workflows/migrations.yml
+      - run: echo "toJson(github) - ${{ toJson(github) }}"
+
+  migrations-master:
+    if: |
+      github.ref == 'master'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Should run commands for master branch merge"
+
+  migrations-production:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Should run commands for production branch merge"
