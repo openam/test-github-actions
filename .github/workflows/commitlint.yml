@@ -1,14 +1,26 @@
-name: Lint Commit Messages
-on: 
-  pull_request:
-    branches:
-      - master
+name: Test Node Version Switch
+on: push
 
 jobs:
   commitlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install node
+        uses: actions/setup-node@v3
         with:
-          fetch-depth: 0
-      - uses: wagoid/commitlint-github-action@v3
+          node-version: 14
+
+      - run: npm version
+      - run: npm version > output.txt
+      - run: cat output.txt
+
+      - name: switch node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - run: npm version
+      - run: cat output.txt
