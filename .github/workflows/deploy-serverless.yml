@@ -72,6 +72,7 @@ jobs:
         builds:
           - name: public-api
           - name: jobs
+        regions: ["us-east-1", "us-east-2"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -112,3 +113,4 @@ jobs:
       # for testing
       - name: Log out docker images
         run: docker images
+      - run: echo region-${{ matrix.region }}
