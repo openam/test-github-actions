@@ -101,11 +101,13 @@ jobs:
         with:
           build-args: |
             SERVICE_NAME=${{ matrix.builds.name }}
+            ENCRYPTION_SECRET=${{ secrets.encryption-secret }}
           cache-from: type=gha
           context: .
           file: service-api.lambda.Dockerfile
           push: false
           tags: ${{ matrix.builds.name }}
+          load: true # should hopefully make it visible via docker images
 
       # for testing
       - name: Log out docker images
