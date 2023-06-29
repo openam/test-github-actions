@@ -10,6 +10,10 @@ on:
         description: Tag/SHA to reference and pull code from
         required: false
         type: string
+      services:
+        description: The services to build and deploy, in JSON array
+        required: true
+        type: string
     secrets:
       encryption-secret:
         description: MongoDB Encryption Secret
@@ -69,7 +73,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        service: [public-api, jobs]
+        service: ${{ fromJSON(inputs.services) }}
         region: ["us-east-1", "us-east-2"]
     runs-on: ubuntu-latest
     steps:
