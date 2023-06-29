@@ -14,7 +14,7 @@ WORKDIR /var/task
 # setup of basic npm packages is worth caching so put them on a new layer
 # custom packages are changed most often but it's still beneficial to cache them
 # cause all service containers will be based of this layer
-COPY package.json .npmrc package-lock.json ./
+COPY package.json package-lock.json ./
 # COPY /packages ./packages
 RUN npm ci
 
@@ -58,7 +58,9 @@ WORKDIR ${WORKDIR}
 
 # Copy from builder
 COPY --from=base ${WORKDIR}/node_modules ./node_modules
-COPY --from=base ${WORKDIR}/services ./services
+# COPY --from=base ${WORKDIR}/services ./services
+RUN mkdir -p services/api
+COPY index.js services/api/
 
 # Run the container under "node" user by default
 USER 1000
