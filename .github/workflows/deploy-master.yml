@@ -1,0 +1,44 @@
+name: Deploy on push to master
+on: push
+
+jobs:
+  get-version:
+    runs-on: ubuntu-latest
+    outputs:
+      current-tag: ${{ steps.get-latest-image-version.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create git short hash tag
+        id: get-latest-image-version
+        shell: bash
+        run: |
+          echo "tag=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+  build-image:
+    needs: [get-version]
+    uses: ./.github/workflows/deploy-serverless.yml
+    with:
+      image-tag: ${{ needs.get-version.outputs.current-tag }}
+    secrets:
+      encryption-secret: Foobar-Encryption-Secret # TODO grab from github secrets
+    #   aws-secret-access-key: ${{ secrets.GH_USER_SECRET }}
+    #   gh-packages-token: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
+
+  alert-build-channel:
+    runs-on: ubuntu-latest
+    needs: [get-version, build-image]
+    # uses: ./.github/workflows/workflow-k8s-manifest-release.yml
+    # with:
+    #   action-type: "DEV Release"
+    #   update-type: "commit"
+    #   image-version: ${{ needs.get-version.outputs.current-tag }}
+    #   release-dev: true
+    #   # just to make sure we don't accidentally deploy to Prod when defaults are changing
+    #   release-sandbox: false
+    #   release-prod: false
+    # secrets:
+    #   manifest-repo-token: ${{ secrets.GH_BOT_USER_TOKEN }}
+    steps:
+      - run: echo "Should message that build is complete"

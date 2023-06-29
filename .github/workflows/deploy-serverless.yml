@@ -1,0 +1,112 @@
+name: Deploy Serverless
+on:
+  workflow_call:
+    inputs:
+      image-tag:
+        description: Tag to put on the docker image
+        required: true
+        type: string
+      ref:
+        description: Tag/SHA to reference and pull code from
+        required: false
+        type: string
+    secrets:
+      encryption-secret:
+        description: MongoDB Encryption Secret
+        required: true
+    #   TODO: figure out how we want to pass the role to assume
+    #   aws-access-key-id:
+    #     description: AWS access key id
+    #     required: true
+    #   aws-secret-access-key:
+    #     description: AWS secret access key
+    #     required: true
+    #   gh-packages-token:
+    #     description: PACKAGES_ACCESS_TOKEN
+    #     required: true
+
+jobs:
+  build-base-layer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # for testing
+      - name: Log out env variables
+        run: echo tag-${{ inputs.image-tag }} ref-${{ inputs.ref }} secret-${{ secrets.encryption-secret }}
+
+      # for testing
+      - name: Log out docker images
+        run: docker images
+
+      - name: Build base image
+        id: build-base-image
+        uses: docker/build-push-action@v3
+        with:
+          # build-args: |
+          #   PACKAGES_ACCESS_TOKEN=${{ secrets.gh-packages-token }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          context: .
+          file: service-api.lambda.Dockerfile
+          push: false
+          target: base
+
+      # for testing
+      - name: Log out docker images
+        run: docker images
+
+  build-images:
+    needs: build-base-layer
+    env:
+      ENCRYPTION_SECRET: ${{ secrets.encryption-secret }}
+    strategy:
+      fail-fast: true
+      matrix:
+        builds:
+          - name: public-api
+          - name: jobs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.aws-access-key-id }}
+      #     aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+      #     aws-region: us-east-1
+      #     role-duration-seconds: 900
+      #     role-to-assume: arn:aws:iam::892765726487:role/GithubActionsRole
+
+      # - name: Login to Amazon ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build & Push ${{ matrix.builds.name }}
+        id: build-image
+        uses: docker/build-push-action@v3
+        with:
+          build-args: |
+            SERVICE_NAME=${{ matrix.builds.name }}
+          cache-from: type=gha
+          context: .
+          file: service-api.lambda.Dockerfile
+          push: false
+          # tags: ${{ steps.login-ecr.outputs.registry }}/${{ matrix.builds.name }}:${{ inputs.image-tag }}
+
+      # for testing
+      - name: Log out docker images
+        run: docker images
