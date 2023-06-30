@@ -10,6 +10,10 @@ on:
         description: Tag/SHA to reference and pull code from
         required: false
         type: string
+      stage:
+        description: The serverless stage deploy
+        required: true
+        type: string
       services:
         description: The services to build and deploy, in JSON array
         required: false
@@ -111,7 +115,8 @@ jobs:
         with:
           build-args: |
             SERVICE_NAME=${{ matrix.service }}
-            ENCRYPTION_SECRET=${{ secrets.encryption-secret }}
+            PACKAGES_ACCESS_TOKEN=${{ secrets.encryption-secret }}
+          # Fix PACKAGES_ACCESS_TOKEN to pull from actual input
           cache-from: type=gha
           cache-to: type=gha,mode=max
           context: .
@@ -157,19 +162,25 @@ jobs:
       #   id: login-ecr
       #   uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build & Push ${{ matrix.service }}
-        id: build-image
+      - name: Build ${{ matrix.service }}
         uses: docker/build-push-action@v3
         with:
           build-args: |
             SERVICE_NAME=${{ matrix.service }}
-            ENCRYPTION_SECRET=${{ secrets.encryption-secret }}
+            PACKAGES_ACCESS_TOKEN=${{ secrets.encryption-secret }}
+          # Fix PACKAGES_ACCESS_TOKEN to pull from actual input
           cache-from: type=gha
           context: .
           file: service-api.lambda.Dockerfile
           push: false
           tags: ${{ matrix.service }}
           load: true # should hopefully make it visible via docker images
+
+      - name: Deploy ${{ matrix.service }} to ${{ matrix.region }}
+        run: |
+          echo cd services/${{ matrix.service }}
+          echo SLS_DEBUG=* ../../node_modules/.bin/serverless package --stage ${{ inputs.stage }} --region=${{ matrix.region }} --package sls-package-output
+          echo SLS_DEBUG=* ../../node_modules/.bin/serverless deploy --verbose --stage ${{ inputs.stage }} --region=${{ matrix.region }} --package sls-package-output
 
       # for testing
       - name: Log out docker images
