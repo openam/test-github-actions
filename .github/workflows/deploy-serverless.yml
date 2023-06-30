@@ -14,6 +14,11 @@ on:
         description: The services to build and deploy, in JSON array
         required: true
         type: string
+      regions:
+        description: The regions to build and deploy, in JSON array
+        required: true
+        type: string
+        default: toJSON([us-east-1])
     secrets:
       encryption-secret:
         description: MongoDB Encryption Secret
@@ -74,7 +79,7 @@ jobs:
       fail-fast: true
       matrix:
         service: ${{ fromJSON(inputs.services) }}
-        region: ["us-east-1", "us-east-2"]
+        region: ${{ fromJSON(inputs.regions) }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
