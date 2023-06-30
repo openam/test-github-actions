@@ -80,6 +80,57 @@ jobs:
       fail-fast: true
       matrix:
         service: ${{ fromJSON(inputs.services) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.aws-access-key-id }}
+      #     aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+      #     aws-region: us-east-1
+      #     role-duration-seconds: 900
+      #     role-to-assume: arn:aws:iam::892765726487:role/GithubActionsRole
+
+      # - name: Login to Amazon ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build & Push ${{ matrix.service }}
+        id: build-image
+        uses: docker/build-push-action@v3
+        with:
+          build-args: |
+            SERVICE_NAME=${{ matrix.service }}
+            ENCRYPTION_SECRET=${{ secrets.encryption-secret }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          context: .
+          file: service-api.lambda.Dockerfile
+          push: false
+          tags: ${{ matrix.service }}
+          load: true # should hopefully make it visible via docker images
+
+      # for testing
+      - name: Log out docker images
+        run: docker images
+      - run: echo region-${{ matrix.region }}
+
+  build-images2:
+    needs: build-images
+    env:
+      ENCRYPTION_SECRET: ${{ secrets.encryption-secret }}
+    strategy:
+      fail-fast: true
+      matrix:
+        service: ${{ fromJSON(inputs.services) }}
         region: ${{ fromJSON(inputs.regions) }}
     runs-on: ubuntu-latest
     steps:
