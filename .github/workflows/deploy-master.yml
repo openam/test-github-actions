@@ -21,7 +21,7 @@ jobs:
     uses: ./.github/workflows/deploy-serverless.yml
     with:
       image-tag: ${{ needs.get-version.outputs.current-tag }}
-      services: '["jobs", "public-api"]'
+      # services: '["jobs", "public-api"]'
       # regions: '["us-east-1", "us-east-2"]'
     secrets:
       encryption-secret: Foobar-Encryption-Secret # TODO grab from github secrets

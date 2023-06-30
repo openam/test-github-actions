@@ -12,8 +12,9 @@ on:
         type: string
       services:
         description: The services to build and deploy, in JSON array
-        required: true
+        required: false
         type: string
+        default: '["jobs"]'
       regions:
         description: The regions to build and deploy, in JSON array
         required: false
