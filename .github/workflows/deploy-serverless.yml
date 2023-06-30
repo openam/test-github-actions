@@ -67,6 +67,8 @@ jobs:
           file: service-api.lambda.Dockerfile
           push: false
           target: base
+          tags: base
+          load: true # should hopefully make it visible via docker images
 
       # for testing
       - name: Log out docker images
