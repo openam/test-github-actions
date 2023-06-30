@@ -16,7 +16,7 @@ on:
         type: string
       regions:
         description: The regions to build and deploy, in JSON array
-        required: true
+        required: false
         type: string
         default: toJSON([us-east-1])
     secrets:
