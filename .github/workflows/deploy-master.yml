@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "tag=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-  build-image:
+  deploy-serverless:
     needs: [get-version]
     uses: ./.github/workflows/deploy-serverless.yml
     with:
@@ -31,17 +31,7 @@ jobs:
 
   alert-build-channel:
     runs-on: ubuntu-latest
-    needs: [get-version, build-image]
-    # uses: ./.github/workflows/workflow-k8s-manifest-release.yml
-    # with:
-    #   action-type: "DEV Release"
-    #   update-type: "commit"
-    #   image-version: ${{ needs.get-version.outputs.current-tag }}
-    #   release-dev: true
-    #   # just to make sure we don't accidentally deploy to Prod when defaults are changing
-    #   release-sandbox: false
-    #   release-prod: false
-    # secrets:
-    #   manifest-repo-token: ${{ secrets.GH_BOT_USER_TOKEN }}
+    needs: [get-version, deploy-serverless]
+
     steps:
       - run: echo "Should message that build is complete"
