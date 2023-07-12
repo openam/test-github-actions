@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: (debug) github.event
         run: echo "${{ toJSON(github.event) }}"
+      - name: (debug) github.event.action
+        run: echo "${{ toJSON(github.event.action) }}"
       - name: (debug) github.event_name
         run: echo "${{ github.event_name }}"
       - name: (debug) github
