@@ -6,18 +6,32 @@ on:
     types: [opened, synchronize, reopened, closed]
 
 jobs:
-  commitlint:
+  always:
     runs-on: ubuntu-latest
     steps:
-      - name: (debug) github.event
-        run: echo "${{ toJSON(github.event) }}"
       - name: (debug) github.event.action
         run: echo "${{ toJSON(github.event.action) }}"
       - name: (debug) github.event_name
         run: echo "${{ github.event_name }}"
+      - name: (debug) github.event
+        run: echo "${{ toJSON(github.event) }}"
       - name: (debug) github
         run: echo "${{ toJSON(github) }}"
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: wagoid/commitlint-github-action@v3
+
+  updated:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false && github.event.action != 'closed'
+    steps:
+      - name: (debug) github.event.action
+        run: echo "${{ toJSON(github.event.action) }}"
+      - name: (debug) should build and run
+        run: echo "should build and run"
+
+  closed:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'closed'
+    steps:
+      - name: (debug) github.event.action
+        run: echo "${{ toJSON(github.event.action) }}"
+      - name: (debug) should tear down
+        run: echo "should tear down"
