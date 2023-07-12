@@ -27,6 +27,20 @@ jobs:
       - name: (debug) should build and run
         run: echo "should build and run"
 
+  conditional-step:
+    runs-on: ubuntu-latest
+    steps:
+      - name: (debug) github.event.action
+        run: echo "${{ toJSON(github.event.action) }}"
+      - name: (debug) should build and run always
+        run: echo "should build and run always"
+      - name: (debug) should build and run on != closed
+        if: github.event.action != 'closed'
+        run: echo "should build and run on != closed"
+      - name: (debug) should build and run on == closed
+        if: github.event.action == 'closed'
+        run: echo "should build and run on == closed"
+
   closed:
     runs-on: ubuntu-latest
     if: github.event.action == 'closed'
