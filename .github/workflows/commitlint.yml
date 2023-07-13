@@ -28,6 +28,7 @@ jobs:
         run: echo "should build and run"
 
   conditional-step:
+    name: ${{ github.event.action != 'closed' && 'conditional-step-not-closed' || 'conditional-step-closed' }}
     runs-on: ubuntu-latest
     steps:
       - name: (debug) github.event.action
