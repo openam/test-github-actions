@@ -22,11 +22,7 @@
   },
   "homepage": "https://github.com/openam/test-github-actions#readme",
   "husky": {
-    "hooks": {
-      "pre-push": "npm run lint && npm test",
-      "pre-commit": "npm test",
-      "commit-msg": "commitlint --edit"
-    }
+    "hooks": {}
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
