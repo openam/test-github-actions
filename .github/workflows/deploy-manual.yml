@@ -1,6 +1,7 @@
 name: Deploy manually
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       environment:
