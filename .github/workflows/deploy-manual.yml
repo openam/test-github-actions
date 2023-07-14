@@ -1,0 +1,33 @@
+name: Deploy manually
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Environment to send traffic to
+        options:
+          - production
+          - sandbox
+      color:
+        type: choice
+        description: Environment to send traffic to
+        default: green
+        options:
+          - blue
+          - green
+
+jobs:
+  serverless:
+    runs-on: ubuntu-latest
+    steps:
+      - name: (debug) github.ref
+        run: echo "${{ toJSON(github.ref) }}"
+      - name: (debug) github.head_ref
+        run: echo "${{ toJSON(github.head_ref) }}"
+      - name: (debug) github.ref_name
+        run: echo "${{ github.ref_name }}"
+      - name: (debug) github.event_name
+        run: echo "${{ github.event_name }}"
+      - name: (debug) github.ref_type
+        run: echo "${{ toJSON(github.ref_type) }}"
