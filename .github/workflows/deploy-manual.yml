@@ -1,7 +1,6 @@
 name: Deploy manually
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       environment:
@@ -32,3 +31,7 @@ jobs:
         run: echo "${{ github.event_name }}"
       - name: (debug) github.ref_type
         run: echo "${{ toJSON(github.ref_type) }}"
+      - name: (debug) github.event.inputs
+        run: echo "${{ toJSON(github.event.inputs) }}"
+      - name: (debug) inputs
+        run: echo "${{ toJSON(inputs) }}"
