@@ -18,7 +18,7 @@ on:
           - green
 
 jobs:
-  serverless:
+  get-version:
     runs-on: ubuntu-latest
     steps:
       - name: (debug) github.ref
@@ -35,3 +35,17 @@ jobs:
         run: echo "${{ toJSON(github.event.inputs) }}"
       - name: (debug) inputs
         run: echo "${{ toJSON(inputs) }}"
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.environment == 'production'
+    steps:
+      - run: |
+          echo "Running production with color ${{ github.event.inputs.color }}"
+
+  deploy-sandbox:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.environment == 'sandbox'
+    steps:
+      - run: |
+          echo "Running sandbox with color ${{ github.event.inputs.color }}"
