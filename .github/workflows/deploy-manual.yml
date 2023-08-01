@@ -79,6 +79,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: success
+        if: ${{ !contains(join(needs.*.result, ','), 'failure') }}
+        run: echo "success"
+
+      - name: failure
+        if: ${{ contains(join(needs.*.result, ','), 'failure') }}
+        run: echo "failure"
+
+  success:
+    needs: [deploy-production, deploy-sandbox]
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: success
+        if: success()
+        run: echo "success"
+
+      - name: failure
+        if: failure()
+        run: echo "failure"
+
+  failure:
+    needs: [deploy-production, deploy-sandbox]
+    if: ${{ always() && contains(join(needs.*.result, ','), 'failure') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: success
         if: success()
         run: echo "success"
 
