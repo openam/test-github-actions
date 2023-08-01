@@ -72,3 +72,16 @@ jobs:
       - name: (debug) success()
         if: success()
         run: echo "running success"
+
+  after:
+    needs: [deploy-production, deploy-sandbox]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: success
+        if: success()
+        run: echo "success"
+
+      - name: failure
+        if: failure()
+        run: echo "failure"
