@@ -56,6 +56,14 @@ jobs:
         id: test
         run: exit 1
 
-      - name: (debug) github.event.inputs
-        if: failure() && ${{ steps.test.outputs.result == 'failure' }}
-        run: echo "${{ toJSON(github.event.inputs) }}"
+      - name: (debug) always()
+        if: always()
+        run: echo "running always"
+
+      - name: (debug) failure()
+        if: failure()
+        run: echo "running failure"
+
+      - name: (debug) success()
+        if: success()
+        run: echo "running success"
