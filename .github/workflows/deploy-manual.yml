@@ -91,6 +91,13 @@ jobs:
         if: ${{ contains(join(needs.*.result, ','), 'failure') }}
         run: echo "failure"
 
+      - name: cancelled
+        if: ${{ cancelled() }}
+        run: echo "cancelled"
+
+      - name: conditional failure or success
+        run: echo "text that is conditional ${{ contains(join(needs.*.result, ','), 'failure') && 'failure' || 'success' }}"
+
   success:
     needs: [deploy-production, deploy-sandbox]
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
