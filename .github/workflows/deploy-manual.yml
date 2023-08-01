@@ -16,6 +16,10 @@ on:
         options:
           - blue
           - green
+      blowup:
+        type: boolean
+        description: Blow up the build
+        default: false
 
 jobs:
   get-version:
@@ -59,6 +63,7 @@ jobs:
 
       - name: foobar
         id: test
+        if: github.event.inputs.blowup == 'true'
         run: exit 1
 
       - name: (debug) always()
