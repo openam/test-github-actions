@@ -75,7 +75,7 @@ jobs:
 
   after:
     needs: [deploy-production, deploy-sandbox]
-    if: always()
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     steps:
       - name: success
