@@ -67,3 +67,7 @@ jobs:
       - name: (debug) success()
         if: success()
         run: echo "running success"
+
+      - name: (debug) success() || failure()
+        if: success() || failure()
+        run: echo "running for ${{ success() && 'success' || 'failure' }}"
