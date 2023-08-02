@@ -20,11 +20,15 @@ on:
         type: boolean
         description: Blow up the build
         default: false
+      notify:
+        type: boolean
+        description: Notify the team
+        default: false
 
 jobs:
   before:
     runs-on: ubuntu-latest
-    if: github.event.inputs.blowup == 'true'
+    if: ${{ github.event.inputs.notify == 'true' }}
     steps:
       - name: (debug)
         run: |
@@ -44,6 +48,16 @@ jobs:
         color: [blue, green]
     if: always()
     steps:
+      - name: (debug)
+        run: |
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.head_ref: ${{ github.head_ref }}"
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.ref_type: ${{ github.ref_type }}"
+          echo "github.ref: ${{ github.ref }}"
+          echo "toJSON(github.event.inputs): ${{ toJSON(github.event.inputs) }}"
+          echo "toJSON(inputs): ${{ toJSON(inputs) }}"
+
       - run: |
           echo "Running ${{ github.event.inputs.environment }} with color ${{ github.event.inputs.color }}"
 
@@ -68,7 +82,7 @@ jobs:
 
   after:
     needs: [deploy]
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && github.event.inputs.notify == 'true'}}
     runs-on: ubuntu-latest
     steps:
       - name: success
