@@ -22,28 +22,23 @@ on:
         default: false
 
 jobs:
-  get-version:
+  before:
     runs-on: ubuntu-latest
     if: github.event.inputs.blowup == 'true'
     steps:
-      - name: (debug) github.ref
-        run: echo "${{ toJSON(github.ref) }}"
-      - name: (debug) github.head_ref
-        run: echo "${{ toJSON(github.head_ref) }}"
-      - name: (debug) github.ref_name
-        run: echo "${{ github.ref_name }}"
-      - name: (debug) github.event_name
-        run: echo "${{ github.event_name }}"
-      - name: (debug) github.ref_type
-        run: echo "${{ toJSON(github.ref_type) }}"
-      - name: (debug) github.event.inputs
-        run: echo "${{ toJSON(github.event.inputs) }}"
-      - name: (debug) inputs
-        run: echo "${{ toJSON(inputs) }}"
+      - name: (debug)
+        run: |
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.head_ref: ${{ github.head_ref }}"
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.ref_type: ${{ github.ref_type }}"
+          echo "github.ref: ${{ github.ref }}"
+          echo "toJSON(github.event.inputs): ${{ toJSON(github.event.inputs) }}"
+          echo "toJSON(inputs): ${{ toJSON(inputs) }}"
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [get-version]
+    needs: [before]
     strategy:
       matrix:
         color: [blue, green]
@@ -90,29 +85,3 @@ jobs:
 
       - name: conditional failure or success
         run: echo "text that is conditional ${{ contains(join(needs.*.result, ','), 'failure') && 'failure' || 'success' }}"
-
-  success:
-    needs: [deploy-production, deploy-sandbox]
-    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: success
-        if: success()
-        run: echo "success"
-
-      - name: failure
-        if: failure()
-        run: echo "failure"
-
-  failure:
-    needs: [deploy-production, deploy-sandbox]
-    if: ${{ always() && contains(join(needs.*.result, ','), 'failure') }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: success
-        if: success()
-        run: echo "success"
-
-      - name: failure
-        if: failure()
-        run: echo "failure"
